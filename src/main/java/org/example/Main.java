@@ -50,7 +50,7 @@ public class Main {
         }
         Metrics cpMetrics = new Metrics();
         start = System.nanoTime();
-        ClosestPair.findClosest(points, cpMetrics);
+        ClosestPair.closestPair(points);
         end = System.nanoTime();
         cpMetrics.setElapsedTime((end - start) / 1_000_000.0);
         cpMetrics.writeCSV("closest_pair_metrics.csv", cpMetrics.getComparisons(), cpMetrics.getMaxDepth());

@@ -27,7 +27,7 @@ public class ClosestPairTest {
             points[i] = new ClosestPair.Point(rand.nextDouble()*100, rand.nextDouble()*100);
         }
 
-        double brute = ClosestPair.bruteForce(points, 0, n);
+        double brute = ClosestPair.bruteForce(points);
         double fast = ClosestPair.closestPair(points);
 
         assertEquals(brute, fast, 1e-6);
