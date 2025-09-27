@@ -1,22 +1,44 @@
 package org.example;
 
+import java.util.Random;
+
 public class QuickSort {
-    public static <T extends Comparable<T>> void sort(T[] arr){
-        if(SortUtils.guard(arr)) return;
-        SortUtils.shuffle(arr);
-        quickSort(arr,0,arr.length-1);
+    private static final Random rnd = new Random();
+
+    public static void sort(int[] arr, Metrics metrics){
+        sort(arr, 0, arr.length - 1, metrics, 1);
     }
 
-    private static <T extends Comparable<T>> void quickSort(T[] arr,int low,int high){
-        if(low<high){
-            int pi=SortUtils.partition(arr,low,high);
-            if(pi-low<high-pi){
-                quickSort(arr,low,pi-1);
-                quickSort(arr,pi+1,high);
-            }else{
-                quickSort(arr,pi+1,high);
-                quickSort(arr,low,pi-1);
+    private static void sort(int[] arr, int left, int right, Metrics metrics, int depth){
+        if(left >= right) return;
+        metrics.updateDepth(depth);
+        int pivotIndex = left + rnd.nextInt(right - left + 1);
+        pivotIndex = partition(arr, left, right, pivotIndex, metrics);
+        if(pivotIndex - left < right - pivotIndex){
+            sort(arr, left, pivotIndex - 1, metrics, depth+1);
+            sort(arr, pivotIndex + 1, right, metrics, depth+1);
+        } else {
+            sort(arr, pivotIndex + 1, right, metrics, depth+1);
+            sort(arr, left, pivotIndex - 1, metrics, depth+1);
+        }
+    }
+
+    private static int partition(int[] arr, int left, int right, int pivotIndex, Metrics metrics){
+        int pivot = arr[pivotIndex];
+        swap(arr, pivotIndex, right);
+        int storeIndex = left;
+        for(int i = left; i<right; i++){
+            metrics.addComparisons(1);
+            if(arr[i] < pivot){
+                swap(arr, storeIndex, i);
+                storeIndex++;
             }
         }
+        swap(arr, right, storeIndex);
+        return storeIndex;
+    }
+
+    private static void swap(int[] arr, int i, int j){
+        int tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
     }
 }
